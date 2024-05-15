@@ -20,8 +20,9 @@
             justify-content: center;
             align-items: flex-start;
             flex-direction: row;
-            background: #000000;
+            background: #221F20;
             font-family: 'Carrotflower', cursive; /* Apply Carrotflower font to all text */
+            color: #EDD79E;
         }
         .container {
             display: flex;
@@ -30,19 +31,21 @@
             max-width: 300px;
             padding: 20px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            background: #f4f4f4;
+            background: #3C3C3C;
             margin: 20px;
             font-family: 'Carrotflower', cursive; /* Apply Carrotflower font to container */
+            color: #EDD79E;
         }
         .form-group {
             margin: 10px 0;
         }
         .form-group input[type="text"] {
-            width: 90%;
+            width: 93%;
             padding: 10px;
             border: 1px solid #ddd;
             border-radius: 4px;
             font-family: 'Carrotflower', cursive; /* Apply Carrotflower font to text inputs */
+            color: #221F20;
         }
         .form-group input[type="range"], .form-group input[type="checkbox"] {
             width: 100%;
@@ -53,8 +56,8 @@
             gap: 10px;
         }
         button {
-            background: #333;
-            color: #fff;
+            background: #EDD79E;
+            color: #221F20;
             padding: 10px 20px;
             border: none;
             border-radius: 4px;
@@ -63,11 +66,17 @@
             font-family: 'Carrotflower', cursive; /* Apply Carrotflower font to buttons */
         }
         button:hover {
-            background: #555;
+            background: #fff;
         }
         h1 {
             font-family: 'Carrotflower', cursive;
             text-align: center;
+        }
+        .logo {
+            display: block;
+            margin: 0 auto;
+            max-width: 100px;
+            height: auto;
         }
         .meme-container-wrapper {
             display: flex;
@@ -78,9 +87,10 @@
             max-width: 600px;
             padding: 20px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            background: #fff;
+            background: #3C3C3C;
             margin: 20px;
             font-family: 'Carrotflower', cursive; /* Apply Carrotflower font to meme container wrapper */
+            color: #EDD79E;
         }
         .meme-container {
             position: relative;
@@ -156,6 +166,7 @@
             border: 1px solid #888;
             width: 80%;
             font-family: 'Carrotflower', cursive; /* Apply Carrotflower font to modal content */
+            color: #221F20;
         }
         .modal-content input[type="text"] {
             font-family: 'Carrotflower', cursive; /* Apply Carrotflower font to modal text inputs */
@@ -205,6 +216,7 @@
 </head>
 <body>
 <div class="container">
+    <img src="https://www.retordlabs.com/Logo.svg" alt="Logo" class="logo">
     <h1>Memetorded Generator</h1>
     <div class="form-group">
         <input type="text" id="searchQuery" placeholder="Search memes..." oninput="searchMemes()">
@@ -223,12 +235,13 @@
         <input type="text" id="tordIdInput" placeholder="Enter Tord ID" oninput="updateTordId(this.value)">
     </div>
     <div class="form-group">
-        <label for="textColorToggle">Invert Text Color?</label>
+        <label for="textColorToggle">Invert Text Color:</label>
         <input type="checkbox" id="textColorToggle" onchange="toggleTextColor()">
+        <label for="textColorToggle"></label>
     </div>
     <div class="button-group">
         <button onclick="addTord()">Add Tord</button>
-        <button onclick="openModal()">Use Ordinal or Upload Image</button>
+        <button onclick="openModal()">Ordinal ID or Upload Image</button>
         <button onclick="downloadMeme()">Download Meme</button>
     </div>
     <div id="tordControlsContainer"></div>
@@ -252,7 +265,7 @@
 <div id="idModal" class="modal">
     <div class="modal-content">
         <span class="close">&times;</span>
-        <p>Enter the Inscription ID for the ordinal you want to memeify or upload an image:</p>
+        <p>Enter the Ordinal Inscription ID or upload an image to use as a meme template:</p>
         <input type="text" id="memeIdInput" placeholder="Enter ID">
         <button onclick="addMemeTemplate()">Submit</button>
         <p>Or</p>
@@ -352,7 +365,7 @@
         const sizeSlider = document.createElement('input');
         sizeSlider.type = 'range';
         sizeSlider.min = '50';
-        sizeSlider.max = '700';
+        sizeSlider.max = '300';
         sizeSlider.value = '100';
         sizeSlider.oninput = function() { updateTordSize(tordImage.id, sizeSlider.value) };
 
@@ -433,7 +446,7 @@
     function updateTextRotate(position) {
         const textElement = document.getElementById(position + 'MemeText');
         const textRotate = document.getElementById(position + 'TextRotate').value;
-        textElement.style.transform = `translateX(-50%) rotate(${textRotate}deg)`;
+        textElement.style.transform = `translate(-50%, -50%) rotate(${textRotate}deg)`; // Update to rotate around center
     }
 
     function updateTordSize(tordId, size) {
@@ -620,12 +633,53 @@
 
     function downloadMeme() {
         const memeContainer = document.getElementById('meme-container');
-        html2canvas(memeContainer, {useCORS: true}).then((canvas) => {
-            const link = document.createElement('a');
-            link.href = canvas.toDataURL('image/png');
-            link.download = 'meme.png';
-            link.click();
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        const memeImage = document.getElementById('memeImage');
+        const topText = document.getElementById('topMemeText');
+        const bottomText = document.getElementById('bottomMemeText');
+        const tordImages = document.querySelectorAll('.tord');
+
+        canvas.width = memeContainer.clientWidth;
+        canvas.height = memeContainer.clientHeight;
+
+        ctx.drawImage(memeImage, 0, 0, canvas.width, canvas.height);
+
+        tordImages.forEach(tord => {
+            if (tord.style.clipPath === 'circle(16% at 50% 69%)') {
+                ctx.save();
+                ctx.beginPath();
+                ctx.arc(tord.offsetLeft + tord.clientWidth / 2, tord.offsetTop + tord.clientHeight * 0.69, tord.clientWidth * 0.16, 0, 2 * Math.PI);
+                ctx.clip();
+                ctx.drawImage(tord, tord.offsetLeft, tord.offsetTop, tord.clientWidth, tord.clientHeight);
+                ctx.restore();
+            } else {
+                ctx.drawImage(tord, tord.offsetLeft, tord.offsetTop, tord.clientWidth, tord.clientHeight);
+            }
         });
+
+        ctx.font = `${topText.style.fontSize} ${getComputedStyle(topText).fontFamily}`;
+        ctx.fillStyle = topText.style.color;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.translate(topText.offsetLeft + topText.clientWidth / 2, topText.offsetTop + topText.clientHeight / 2);
+        ctx.rotate(parseFloat(topText.style.transform.replace(/[^\d.]/g, '')) * Math.PI / 180);
+        ctx.fillText(topText.textContent, 0, 0);
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+
+        ctx.font = `${bottomText.style.fontSize} ${getComputedStyle(bottomText).fontFamily}`;
+        ctx.fillStyle = bottomText.style.color;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.translate(bottomText.offsetLeft + bottomText.clientWidth / 2, bottomText.offsetTop + bottomText.clientHeight / 2);
+        ctx.rotate(parseFloat(bottomText.style.transform.replace(/[^\d.]/g, '')) * Math.PI / 180);
+        ctx.fillText(bottomText.textContent, 0, 0);
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+
+        const link = document.createElement('a');
+        link.href = canvas.toDataURL('image/png');
+        link.download = 'meme.png';
+        link.click();
     }
 
     function screenshotMeme() {
