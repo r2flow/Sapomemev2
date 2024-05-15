@@ -375,12 +375,6 @@
         rotateSlider.value = '0';
         rotateSlider.oninput = function() { updateTordRotate(tordImage.id, rotateSlider.value) };
 
-        const headOnlyCheckbox = document.createElement('input');
-        headOnlyCheckbox.type = 'checkbox';
-        headOnlyCheckbox.onchange = function() { toggleTordHeadOnly(tordImage.id, headOnlyCheckbox.checked) };
-        const headOnlyLabel = document.createElement('label');
-        headOnlyLabel.innerText = 'Head Only';
-
         const removeButton = document.createElement('button');
         removeButton.innerText = 'Remove Tord';
         removeButton.onclick = function() { removeTord(tordImage.id, tordControlGroup.id) };
@@ -396,14 +390,6 @@
         tordCounter++;
     }
 
-    function toggleTordHeadOnly(tordId, headOnly) {
-        const tordImage = document.getElementById(tordId);
-        if (headOnly) {
-            tordImage.style.clipPath = 'circle(16% at 50% 69%)';
-        } else {
-            tordImage.style.clipPath = '';
-        }
-    }
 
     function toggleTextColor() {
         const topText = document.getElementById('topMemeText');
