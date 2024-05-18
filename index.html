@@ -392,8 +392,8 @@
             tordImage.style.position = 'absolute';
             tordImage.style.top = '0';
             tordImage.style.left = '0';
-            tordImage.style.width = '200px';
-            tordImage.style.height = '240px'; // Maintain aspect ratio
+            tordImage.style.width = '100px';
+            tordImage.style.height = '120px'; // Maintain aspect ratio
             tordImage.style.cursor = 'move';
             tordImage.draggable = true;
             tordImage.style.zIndex = 10;
@@ -495,12 +495,11 @@
             textElement.style.transform = `translate(-50%, -50%) rotate(${textRotate}deg)`;
         }
 
-        function updateTordSize(tordId, size) {
-            const tordImage = document.getElementById(tordId);
-            const aspectRatio = tordImage.naturalWidth / tordImage.naturalHeight;
-            tordImage.style.width = size + 'px';
-            tordImage.style.height = (size / aspectRatio) + 'px';
-        }
+function updateTordSize(tordId, size, aspectRatio) {
+    const tordImage = document.getElementById(tordId);
+    tordImage.style.width = size + 'px';
+    tordImage.style.height = size + 'px';
+}
 
         function updateTordRotate(tordId, rotate) {
             const tordImage = document.getElementById(tordId);
@@ -773,7 +772,7 @@
             sizeSlider.min = '50';
             sizeSlider.max = '900';
             sizeSlider.value = '100';
-            sizeSlider.oninput = function() { updateTordSize(element.id, sizeSlider.value) };
+            sizeSlider.oninput = function() { updateTordSize(element.id, sizeSlider.value, element.naturalWidth / element.naturalHeight) };
 
             const rotateSlider = document.createElement('input');
             rotateSlider.type = 'range';
