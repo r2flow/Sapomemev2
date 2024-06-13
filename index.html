@@ -334,8 +334,8 @@
         let selectedElement = null;
 
         const layerOrder = [
-  "background", "background art", "boards", "both hand", "left hand", "right hand", "body", "chad bodies",
-  "facial hair", "facial", "eyes", "head", "clothes", "chad clothes", "mouth", "helmet", "mask", "texture"        ];
+            "boards", "both hand", "left hand", "right hand", "special", "body", "chad bodies", "facial hair", "eyes", "head", "clothes", "chad clothes", "mouth", "helmet", "mask", "texture"
+        ];
 
         Promise.all([
             fetch(traitsUrl).then(response => response.json()),
